@@ -13,7 +13,7 @@ namespace Task1
         public int sz;
         public FarManager()
         {
-            cursor = 0;
+            cursor = 0;     //находимся в самом верху
         }
 
         public void Up()
@@ -25,18 +25,18 @@ namespace Task1
         public void Down()
         {
             cursor++;
-            if (cursor == sz)
+            if (cursor == sz) //последняя строка у нас size-1 и если мы нажали на down и его сделал +, то курсор будет равен сайз
                 cursor = 0;
         }
             
         public void Color(FileSystemInfo fs, int index)
         {
-            if (index==cursor)
+            if (index==cursor) //мы находимся на том файле, где у нас стоит курсор
             {
                 Console.BackgroundColor = ConsoleColor.DarkMagenta;
                 Console.ForegroundColor = ConsoleColor.White;
             }
-             else if (fs.GetType() == typeof(DirectoryInfo))
+             else if (fs.GetType() == typeof(DirectoryInfo)) //GetType - возвращает тип файлов (DirectoryInfo/File)
             {
                 Console.BackgroundColor = ConsoleColor.Black;
                 Console.ForegroundColor = ConsoleColor.White;
@@ -48,18 +48,18 @@ namespace Task1
             }
         }
 
-        public void Show(string path)
+        public void Show(string path)  //Здесь мы хотим показать весь список содержимое в папке на экран. path-путь до какой-то папке
         {
             DirectoryInfo directory = new DirectoryInfo(path);
-            FileSystemInfo [] fileSystemInfos = directory.GetFileSystemInfos();
-            sz = fileSystemInfos.Length;
+            FileSystemInfo [] fileSystemInfos = directory.GetFileSystemInfos(); //FileSystemInfos - array of Files and Directories
+            sz = fileSystemInfos.Length;  //количество файлов.
             int index = 0;
 
             foreach (FileSystemInfo fs in fileSystemInfos)
             {
-                if (fs.Name.StartsWith("."))   //скрытные файлы
+                if (fs.Name.StartsWith("."))   //не показывать скрытные файлы
                     continue;
-                   this.Color(fs, index);
+                   this.Color(fs, index);  //мы передаем туда fs, в зависимости от fs мы красим, и вводим это fs.name на экран
 
               Console.WriteLine(index+1 + ". " + fs.Name );
                 index++;
@@ -69,16 +69,18 @@ namespace Task1
             public void Start(string path)
         {
             ConsoleKeyInfo consoleKey = Console.ReadKey();
-            while (consoleKey.Key!=ConsoleKey.Escape)
+            while (consoleKey.Key != ConsoleKey.Escape)  //делает бесконечных циклов до тем, пока мы Escape не нажмем
             {
                 Console.BackgroundColor = ConsoleColor.Black;
-                Console.Clear();
+                Console.Clear(); //берет последний програм который давали и полностью красить этот цвет вашему цвету
                 Show(path);
                 consoleKey = Console.ReadKey();
                 if (consoleKey.Key == ConsoleKey.UpArrow)
                     this.Up();
                 if (consoleKey.Key == ConsoleKey.DownArrow)
                     Down();
+
+            
             }
         }
     }
@@ -86,7 +88,7 @@ namespace Task1
     {
         static void Main(string[] args)
         {
-            FarManager farManager = new FarManager();
+            FarManager farManager = new FarManager();   //мы создаем экземпляр FarManager
             farManager.Start("C:/Users/админ/Desktop/ICT");
 
         }
